@@ -19,6 +19,40 @@ const DEBOUNCE_DELAY = 300;
 // flags.svg - ссылка на изображение флага
 // languages - массив языков
 
+const input = document.querySelector("input");
+const countryList = document.querySelector(".country-list");
+
+input.addEventListener("input", () => {
+  fetchCountries()
+    .then((countries) => renderUserList(countries))
+    .catch((error) => console.log(error));
+});
+
+function fetchCountries() {
+  return fetch("https://restcountries.com/v3.1/name/germany").then(
+    (response) => {
+      if (!response.ok) {
+        throw new Error(response.status);
+      }
+      return response.json();
+    }
+  );
+}
+
+function renderUserList(countries) {
+  const markup = countries
+    .map((country) => {
+      return `<li>
+          <p><img src="${country.flags.svg}" alt="flag" width=30><b> ${country.name.official}</b></p>
+          <p><b>Capital</b>: ${country.capital}</p>
+          <p><b>Population</b>: ${country.population}</p>
+          <p><b>Languages</b>: ${country.languages}</p>        
+        </li>`;
+    })
+    .join("");
+  countryList.innerHTML = markup;
+}
+
 // 3. Название страны для поиска пользователь вводит в текстовое поле
 // input#search - box. HTTP - запросы выполняются при наборе имени страны,
 // то есть по событию input.Но, делать запрос при каждом нажатии клавиши нельзя,
