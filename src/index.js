@@ -1,4 +1,6 @@
 import "./css/styles.css";
+import debounce from "lodash.debounce";
+import fetchCountries() from "./fetchCountries";
 
 const DEBOUNCE_DELAY = 300;
 
@@ -21,23 +23,37 @@ const DEBOUNCE_DELAY = 300;
 
 const input = document.querySelector("input");
 const countryList = document.querySelector(".country-list");
+const countryInfo = document.querySelector(".country-info");
 
-input.addEventListener("input", () => {
-  fetchCountries()
-    .then((countries) => renderUserList(countries))
-    .catch((error) => console.log(error));
-});
+input.addEventListener(
+  "input",
+  _.debounce(() => {
+    fetchCountries()
+      .then((countries) => renderUserList(countries))
+      .catch((error) => console.log(error));
+  }, 300)
+);
 
-function fetchCountries() {
-  return fetch("https://restcountries.com/v3.1/name/germany").then(
-    (response) => {
-      if (!response.ok) {
-        throw new Error(response.status);
-      }
-      return response.json();
-    }
-  );
-}
+// function fetchCountries() {
+//   const searchParams = new URLSearchParams({
+//     _limit: 5,
+//     _sort: "name",
+//   });
+
+//   console.log(searchParams.toString()); // "_limit=5&_sort=name"
+
+//   const url = `https://jsonplaceholder.typicode.com/users?${searchParams}`;
+//   console.log(url); // "https://jsonplaceholder.typicode.com/users?_limit=5&_sort=name"
+
+//   return fetch("https://restcountries.com/v3.1/name/germany").then(
+//     (response) => {
+//       if (!response.ok) {
+//         throw new Error(response.status);
+//       }
+//       return response.json();
+//     }
+//   );
+// }
 
 function renderUserList(countries) {
   const markup = countries
@@ -59,7 +75,8 @@ function renderUserList(countries) {
 // так как одновременно получится много запросов и они будут выполняться в непредсказуемом порядке.
 
 // 3.1. Необходимо применить приём Debounce на обработчике события и делать HTTP-запрос
-// спустя 300мс после того, как пользователь перестал вводить текст.Используй пакет lodash.debounce.
+// спустя 300мс после того, как пользователь перестал вводить текст.
+// Используй пакет lodash.debounce.
 
 // 3.2. Если пользователь полностью очищает поле поиска, то HTTP-запрос не выполняется,
 // а разметка списка стран или информации о стране пропадает.
