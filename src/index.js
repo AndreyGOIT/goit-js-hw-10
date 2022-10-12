@@ -1,6 +1,6 @@
 import "./css/styles.css";
 import debounce from "lodash.debounce";
-import fetchCountries() from "./fetchCountries";
+import { fetchCountries } from "./fetchCountries";
 
 const DEBOUNCE_DELAY = 300;
 
@@ -27,11 +27,11 @@ const countryInfo = document.querySelector(".country-info");
 
 input.addEventListener(
   "input",
-  _.debounce(() => {
-    fetchCountries()
+  debounce(() => {
+    fetchCountries(name)
       .then((countries) => renderUserList(countries))
       .catch((error) => console.log(error));
-  }, 300)
+  }, DEBOUNCE_DELAY)
 );
 
 // function fetchCountries() {

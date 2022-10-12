@@ -1,6 +1,4 @@
-// function fetchCountries(name) {}
-
-export function fetchCountries() {
+export function fetchCountries(name) {
   const searchParams = new URLSearchParams({
     _limit: 5,
     _sort: "name",
@@ -8,15 +6,14 @@ export function fetchCountries() {
 
   console.log(searchParams.toString()); // "_limit=5&_sort=name"
 
-  const url = `https://jsonplaceholder.typicode.com/users?${searchParams}`;
-  console.log(url); // "https://jsonplaceholder.typicode.com/users?_limit=5&_sort=name"
+  // const url = `https://restcountries.com/v3.1/name/?${searchParams}`;
+  const url = `https://restcountries.com/v3.1/name/germany`;
+  console.log(url);
 
-  return fetch("https://restcountries.com/v3.1/name/germany").then(
-    (response) => {
-      if (!response.ok) {
-        throw new Error(response.status);
-      }
-      return response.json();
+  return fetch(url).then((response) => {
+    if (!response.ok) {
+      throw new Error(response.status);
     }
-  );
+    return response.json();
+  });
 }
