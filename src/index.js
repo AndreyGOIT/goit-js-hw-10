@@ -1,9 +1,9 @@
 import "./css/styles.css";
 import debounce from "lodash.debounce";
 import { fetchCountries } from "./fetchCountries";
+import Notiflix from "notiflix";
 
 const DEBOUNCE_DELAY = 300;
-
 // 1. Напиши функцию fetchCountries(name) которая делает HTTP-запрос на ресурс
 // name и возвращает промис с массивом стран - результатом запроса.
 // Вынеси её в отдельный файл fetchCountries.js и сделай именованный экспорт.
@@ -20,40 +20,20 @@ const DEBOUNCE_DELAY = 300;
 // population - население
 // flags.svg - ссылка на изображение флага
 // languages - массив языков
-
 const input = document.querySelector("input");
 const countryList = document.querySelector(".country-list");
 const countryInfo = document.querySelector(".country-info");
 
-input.addEventListener(
-  "input",
-  debounce(() => {
-    fetchCountries(name)
-      .then((countries) => renderUserList(countries))
-      .catch((error) => console.log(error));
-  }, DEBOUNCE_DELAY)
-);
+input.addEventListener("input", debounce(onFetch, DEBOUNCE_DELAY));
 
-// function fetchCountries() {
-//   const searchParams = new URLSearchParams({
-//     _limit: 5,
-//     _sort: "name",
-//   });
-
-//   console.log(searchParams.toString()); // "_limit=5&_sort=name"
-
-//   const url = `https://jsonplaceholder.typicode.com/users?${searchParams}`;
-//   console.log(url); // "https://jsonplaceholder.typicode.com/users?_limit=5&_sort=name"
-
-//   return fetch("https://restcountries.com/v3.1/name/germany").then(
-//     (response) => {
-//       if (!response.ok) {
-//         throw new Error(response.status);
-//       }
-//       return response.json();
-//     }
-//   );
-// }
+function onFetch(event) {
+  event.preventDefault();
+  const searchCountries = event.target.value;
+  console.log(searchCountries);
+  fetchCountries(searchCountries)
+    .then((countries) => renderUserList(countries))
+    .catch((error) => console.log(error));
+}
 
 function renderUserList(countries) {
   const markup = countries
