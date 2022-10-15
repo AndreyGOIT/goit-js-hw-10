@@ -7,8 +7,8 @@ export function fetchCountries(searchCountries) {
   console.log(searchParams.toString()); // "_limit=5&_sort=name"
   // const restOfUrl = searchParams.toString();
 
-  // const url = `https://restcountries.com/v3.1/name/${searchCountries}?fields=name.official,capital,population,flags.svg,languages`;
-  const url = `https://restcountries.com/v3.1/name/${searchCountries}`;
+  const url = `https://restcountries.com/v3.1/name/${searchCountries}?fields=name,capital,population,flags,languages`;
+  // const url = `https://restcountries.com/v3.1/name/${searchCountries}`;
   console.log(url);
 
   return fetch(url).then((response) => {

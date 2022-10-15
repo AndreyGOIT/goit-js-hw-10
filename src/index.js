@@ -64,10 +64,14 @@ function renderUserList(countries) {
   const markup = countries
     .map((country) => {
       return `<li>
-          <p><img src="${country.flags.svg}" alt="flag" width=30><b> ${country.name.official}</b></p>
+          <p><img src="${country.flags.svg}" alt="flag" width=30><b> ${
+        country.name.official
+      }</b></p>
           <p><b>Capital</b>: ${country.capital}</p>
           <p><b>Population</b>: ${country.population}</p>
-          <p><b>Languages</b>: ${country.languages}</p>        
+          <p><b>Languages</b>: ${Object.getOwnPropertyNames(
+            country.languages
+          )}</p>        
         </li>`;
     })
     .join("");
