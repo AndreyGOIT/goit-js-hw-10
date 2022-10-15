@@ -1,7 +1,7 @@
 import "./css/styles.css";
 import debounce from "lodash.debounce";
 import { fetchCountries } from "./fetchCountries";
-import Notiflix from "notiflix";
+import { Notify } from "notiflix/build/notiflix-notify-aio";
 
 const DEBOUNCE_DELAY = 300;
 // 1. Напиши функцию fetchCountries(name) которая делает HTTP-запрос на ресурс
@@ -31,8 +31,33 @@ function onFetch(event) {
   const searchCountries = event.target.value;
   console.log(searchCountries);
   fetchCountries(searchCountries)
-    .then((countries) => renderUserList(countries))
-    .catch((error) => console.log(error));
+    .then((countries) => {
+      if (countries.length > 10) {
+        Notify.info(
+          "Too many matches found. Please enter a more specific name."
+        );
+      } else if (countries.length >= 2 && countries.length <= 10) {
+        renderUserShortList(countries);
+      } else {
+        renderUserList(countries);
+      }
+      console.log(countries.length);
+    })
+    .catch((error) => {
+      Notify.failure("Oops, there is no country with that name");
+      countryList.innerHTML = "";
+      console.log(error);
+    });
+}
+function renderUserShortList(countries) {
+  const markup = countries
+    .map((country) => {
+      return `<li>
+          <p><img src="${country.flags.svg}" alt="flag" width=30><b> ${country.name.official}</b></p>       
+        </li>`;
+    })
+    .join("");
+  countryList.innerHTML = markup;
 }
 
 function renderUserList(countries) {
