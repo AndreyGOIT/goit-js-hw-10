@@ -30,12 +30,16 @@ function onFetch(event) {
   event.preventDefault();
   const searchCountries = event.target.value;
   console.log(searchCountries);
+  if (searchCountries === 0 || searchCountries === "") {
+    return console.log("Input field has no value");
+  }
   fetchCountries(searchCountries)
     .then((countries) => {
       if (countries.length > 10) {
         Notify.info(
           "Too many matches found. Please enter a more specific name."
         );
+        countryList.innerHTML = "";
       } else if (countries.length >= 2 && countries.length <= 10) {
         renderUserShortList(countries);
       } else {
@@ -64,7 +68,9 @@ function renderUserList(countries) {
   const markup = countries
     .map((country) => {
       return `<li>
-          <p><img src="${country.flags.svg}" alt="flag" width=30><b> ${
+          <p><img src="${
+            country.flags.svg
+          }" alt="flag" width=30><b style="font-size: 24px"> ${
         country.name.official
       }</b></p>
           <p><b>Capital</b>: ${country.capital}</p>
