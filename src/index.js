@@ -28,7 +28,8 @@ input.addEventListener("input", debounce(onFetch, DEBOUNCE_DELAY));
 
 function onFetch(event) {
   event.preventDefault();
-  const searchCountries = event.target.value;
+  const inputData = event.target.value;
+  const searchCountries = inputData.trim();
   console.log(searchCountries);
   if (searchCountries === 0 || searchCountries === "") {
     return console.log("Input field has no value");
